@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acil İhtiyaç Duyuru Formu</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f8fafc;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+            padding: 32px 24px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 14px;
+        }
+
+        .form-section {
+            padding: 32px 24px;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #374151;
+            font-size: 14px;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.2s ease;
+            background: #ffffff;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #ef4444;
+            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+        }
+
+        .need-type-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 12px;
+            margin-top: 8px;
+        }
+
+        .need-option {
+            position: relative;
+        }
+
+        .need-option input[type="checkbox"] {
+            display: none;
+        }
+
+        .need-option label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px 12px;
+            background: #f9fafb;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-weight: 600;
+            text-align: center;
+            min-height: 60px;
+        }
+
+        .need-option input[type="checkbox"]:checked + label {
+            background: #ef4444;
+            color: white;
+            border-color: #ef4444;
+        }
+
+        .blood-type-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .blood-type-option {
+            position: relative;
+        }
+
+        .blood-type-option input[type="radio"] {
+            display: none;
+        }
+
+        .blood-type-option label {
+            display: block;
+            padding: 12px 8px;
+            background: #f9fafb;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .blood-type-option input[type="radio"]:checked + label {
+            background: #ef4444;
+            color: white;
+            border-color: #ef4444;
+        }
+
+        .blood-group-section {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .blood-group-section.show {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .generate-btn {
+            width: 100%;
+            padding: 16px;
+            background: #ef4444;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .generate-btn:hover {
+            background: #dc2626;
+        }
+
+        .generate-btn:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+        }
+
+        .result-section {
+            background: #f9fafb;
+            padding: 24px;
+            border-top: 1px solid #e5e7eb;
+            display: none;
+        }
+
+        .result-section.show {
+            display: block;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .result-text {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            white-space: pre-line;
+            margin-bottom: 16px;
+            color: #374151;
+        }
+
+        .copy-btn {
+            background: #10b981;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            justify-content: center;
+        }
+
+        .copy-btn:hover {
+            background: #059669;
+        }
+
+        .copy-btn.copied {
+            background: #6b7280;
+        }
+
+        .required {
+            color: #ef4444;
+        }
+
+        @media (max-width: 640px) {
+            .container {
+                margin: 10px;
+                border-radius: 12px;
+            }
+            
+            .form-section {
+                padding: 24px 20px;
+            }
+            
+            .header {
+                padding: 24px 20px;
+            }
+            
+            .blood-type-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .need-type-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚨 Acil İhtiyaç Duyuru Formu</h1>
+            <p>Hayat kurtaran duyurunuzu hızlıca hazırlayın</p>
+        </div>
+
+        <div class="form-section">
+            <form id="ihtiyacForm">
+                <div class="form-group">
+                    <label>İhtiyaç Türü <span class="required">*</span></label>
+                    <div class="need-type-grid">
+                        <div class="need-option">
+                            <input type="checkbox" id="kan" name="ihtiyac" value="kan">
+                            <label for="kan">🩸 Kan</label>
+                        </div>
+                        <div class="need-option">
+                            <input type="checkbox" id="trombosit" name="ihtiyac" value="trombosit">
+                            <label for="trombosit">🔴 Trombosit</label>
+                        </div>
+                        <div class="need-option">
+                            <input type="checkbox" id="plasma" name="ihtiyac" value="plasma">
+                            <label for="plasma">💧 Plasma</label>
+                        </div>
+                        <div class="need-option">
+                            <input type="checkbox" id="granulasit" name="ihtiyac" value="granulasit">
+                            <label for="granulasit">⚪ Granülasit</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group blood-group-section" id="bloodGroupSection">
+                    <label>Kan Grubu <span class="required">*</span></label>
+                    <div class="blood-type-grid">
+                        <div class="blood-type-option">
+                            <input type="radio" id="a-pos" name="kangrubu" value="A RH+">
+                            <label for="a-pos">A RH+</label>
+                        </div>
+                        <div class="blood-type-option">
+                            <input type="radio" id="a-neg" name="kangrubu" value="A RH-">
+                            <label for="a-neg">A RH-</label>
+                        </div>
+                        <div class="blood-type-option">
+                            <input type="radio" id="b-pos" name="kangrubu" value="B RH+">
+                            <label for="b-pos">B RH+</label>
+                        </div>
+                        <div class="blood-type-option">
+                            <input type="radio" id="b-neg" name="kangrubu" value="B RH-">
+                            <label for="b-neg">B RH-</label>
+                        </div>
+                        <div class="blood-type-option">
+                            <input type="radio" id="ab-pos" name="kangrubu" value="AB RH+">
+                            <label for="ab-pos">AB RH+</label>
+                        </div>
+                        <div class="blood-type-option">
+                            <input type="radio" id="ab-neg" name="kangrubu" value="AB RH-">
+                            <label for="ab-neg">AB RH-</label>
+                        </div>
+                        <div class="blood-type-option">
+                            <input type="radio" id="o-pos" name="kangrubu" value="0 RH+">
+                            <label for="o-pos">0 RH+</label>
+                        </div>
+                        <div class="blood-type-option">
+                            <input type="radio" id="o-neg" name="kangrubu" value="0 RH-">
+                            <label for="o-neg">0 RH-</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="hastaisim">Hasta İsmi <span class="required">*</span></label>
+                    <input type="text" id="hastaisim" name="hastaisim" required placeholder="Hasta adını girin">
+                </div>
+
+                <div class="form-group">
+                    <label for="il">İl <span class="required">*</span></label>
+                    <input type="text" id="il" name="il" required placeholder="Şehir adını girin">
+                </div>
+
+                <div class="form-group">
+                    <label for="hastane">Hastane <span class="required">*</span></label>
+                    <input type="text" id="hastane" name="hastane" required placeholder="Hastane adını girin">
+                </div>
+
+                <div class="form-group">
+                    <label for="telefon">İletişim Numarası <span class="required">*</span></label>
+                    <input type="tel" id="telefon" name="telefon" required placeholder="0555 123 45 67">
+                </div>
+
+                <button type="submit" class="generate-btn">
+                    🚨 Duyuru Oluştur
+                </button>
+            </form>
+        </div>
+
+        <div class="result-section" id="resultSection">
+            <div class="result-text" id="resultText"></div>
+            <button class="copy-btn" id="copyBtn">
+                📋 Kopyala
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // İhtiyaç türü seçimi ile kan grubu bölümünü göster/gizle
+        const ihtiyacCheckboxes = document.querySelectorAll('input[name="ihtiyac"]');
+        const bloodGroupSection = document.getElementById('bloodGroupSection');
+
+        ihtiyacCheckboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                const kanSelected = document.getElementById('kan').checked;
+                const trombositSelected = document.getElementById('trombosit').checked;
+                const plasmaSelected = document.getElementById('plasma').checked;
+                
+                if (kanSelected || trombositSelected || plasmaSelected) {
+                    bloodGroupSection.classList.add('show');
+                } else {
+                    bloodGroupSection.classList.remove('show');
+                }
+            });
+        });
+
+        document.getElementById('ihtiyacForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // İhtiyaç türlerini al
+            const selectedNeeds = [];
+            ihtiyacCheckboxes.forEach(checkbox => {
+                if (checkbox.checked) {
+                    selectedNeeds.push(checkbox.value.toUpperCase());
+                }
+            });
+
+            if (selectedNeeds.length === 0) {
+                alert('Lütfen en az bir ihtiyaç türü seçin!');
+                return;
+            }
+
+            const formData = new FormData(this);
+            const data = {};
+            
+            for (let [key, value] of formData.entries()) {
+                data[key] = value;
+            }
+
+            // Kan grubu kontrolü
+            const needsBloodGroup = selectedNeeds.some(need => 
+                need === 'KAN' || need === 'TROMBOSİT' || need === 'PLASMA' || need === 'GRANÜLASİT'
+            );
+            
+            if (needsBloodGroup && !data.kangrubu) {
+                alert('Lütfen kan grubunu seçin!');
+                return;
+            }
+            
+            // Teyit zamanı için bugünün tarihini ve saatini al
+            const today = new Date();
+            const days = ['Pazar', 'Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma', 'Cumartesi'];
+            const months = ['Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran', 
+                           'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık'];
+            
+            const dayName = days[today.getDay()];
+            const day = today.getDate();
+            const monthName = months[today.getMonth()];
+            const hours = today.getHours().toString().padStart(2, '0');
+            const minutes = today.getMinutes().toString().padStart(2, '0');
+            
+            const teyitZamani = `${day} ${monthName} ${dayName} ${hours}:${minutes}`;
+
+            // İhtiyaç türünü formatla
+            let ihtiyacText = '';
+            if (selectedNeeds.length === 1) {
+                ihtiyacText = `ACİL ${selectedNeeds[0]} İHTİYACI`;
+            } else if (selectedNeeds.length === 2) {
+                ihtiyacText = `ACİL ${selectedNeeds.join(' VE ')} İHTİYACI`;
+            } else {
+                const lastNeed = selectedNeeds.pop();
+                ihtiyacText = `ACİL ${selectedNeeds.join(', ')} VE ${lastNeed} İHTİYACI`;
+            }
+            
+            // Duyuru metnini oluştur
+            let duyuruMetni = ihtiyacText + '\n\n';
+            
+            if (needsBloodGroup && data.kangrubu) {
+                duyuruMetni += `KAN GRUBU : ${data.kangrubu}\n`;
+            }
+            
+            duyuruMetni += `İL : ${data.il.toUpperCase()}\n`;
+            duyuruMetni += `BAĞIŞ YAPILACAĞI MERKEZ : ${data.hastane.toUpperCase()}\n`;
+            duyuruMetni += `HASTA : ${data.hastaisim.toUpperCase()}\n`;
+            duyuruMetni += `İLETİŞİM NUMARASI : ${data.telefon}\n`;
+            duyuruMetni += `TEYİT ZAMANI : ${teyitZamani.toUpperCase()}`;
+
+            document.getElementById('resultText').textContent = duyuruMetni;
+            document.getElementById('resultSection').classList.add('show');
+            document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth' });
+        });
+
+        document.getElementById('copyBtn').addEventListener('click', function() {
+            const resultText = document.getElementById('resultText').textContent;
+            
+            navigator.clipboard.writeText(resultText).then(function() {
+                const btn = document.getElementById('copyBtn');
+                const originalText = btn.innerHTML;
+                
+                btn.innerHTML = '✅ Kopyalandı!';
+                btn.classList.add('copied');
+                
+                setTimeout(function() {
+                    btn.innerHTML = originalText;
+                    btn.classList.remove('copied');
+                }, 2000);
+            }).catch(function() {
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = resultText;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                
+                const btn = document.getElementById('copyBtn');
+                const originalText = btn.innerHTML;
+                
+                btn.innerHTML = '✅ Kopyalandı!';
+                btn.classList.add('copied');
+                
+                setTimeout(function() {
+                    btn.innerHTML = originalText;
+                    btn.classList.remove('copied');
+                }, 2000);
+            });
+        });
+
+        // Telefon numarası formatlaması
+        document.getElementById('telefon').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length > 0) {
+                if (value.length <= 4) {
+                    value = value;
+                } else if (value.length <= 7) {
+                    value = value.slice(0, 4) + ' ' + value.slice(4);
+                } else if (value.length <= 9) {
+                    value = value.slice(0, 4) + ' ' + value.slice(4, 7) + ' ' + value.slice(7);
+                } else {
+                    value = value.slice(0, 4) + ' ' + value.slice(4, 7) + ' ' + value.slice(7, 9) + ' ' + value.slice(9, 11);
+                }
+            }
+            e.target.value = value;
+        });
+    </script>
+</body>
+</html>
